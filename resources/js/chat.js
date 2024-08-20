@@ -12,6 +12,12 @@ const sendMessageForm = document.getElementById('chatForm');
 
 sendMessageForm.addEventListener('submit', async function(e) {
     e.preventDefault(); // Prevent the default form submission
+    
+    
+     echo.channel('laravelChat')
+ .listen('.chatting', (e) => {
+ console.log(e.message);
+ });
 
     if (userMessageInput.value.trim() != '') {
         try {
@@ -19,7 +25,7 @@ sendMessageForm.addEventListener('submit', async function(e) {
                 username: 'taimoor',
                 message: userMessageInput.value
             });
-            // console.log('Response:', response);
+            console.log('Response:', response);
             alert('Message sent successfully!');
             userMessageInput.value = ''; // Clear the input field
         } catch (error) {
@@ -29,17 +35,6 @@ sendMessageForm.addEventListener('submit', async function(e) {
     } else {
         alert('Please enter a message before submitting.');
     }
-
-    window.Echo.channel('laravelChat')
-    .listen('chatting', (res) => {
-        console.log('Message received:', res);
-    })
-    .listen('.pusher:subscription_succeeded', (data) => {
-        console.log('Successfully subscribed to channel');
-    })
-    .error(error => {
-        console.error('Error connecting to channel:', error);
-    });
 
 
 });
